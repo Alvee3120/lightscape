@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Portfolio | LightScape{% endblock %}
+{% block content %}
+
+<section class="max-w-7xl mx-auto px-margin-mobile md:px-grid-gutter py-section-gap">
+    <div class="mb-12 text-center">
+        <h1 class="font-lumi-display text-lumi-headline-lg text-lumi-on-background mb-2">Portfolio</h1>
+        <p class="font-lumi-body text-lumi-on-surface-variant">A curated look at recent work.</p>
+    </div>
+
+    <div id="portfolio-container">
+        {% include 'gallery/_portfolio_content.html' %}
+    </div>
+</section>
+
+{% endblock %}

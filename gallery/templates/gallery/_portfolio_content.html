@@ -1,0 +1,36 @@
+<!-- Category Filter Bar -->
+<div class="flex flex-wrap justify-center gap-6 mb-8">
+    <button
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if not active_category %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
+        hx-get="{% url 'gallery:portfolio_list' %}"
+        hx-target="#portfolio-container"
+        hx-push-url="true">
+        All
+    </button>
+    {% for cat in categories %}
+    <button
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if active_category == cat.slug %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
+        hx-get="{% url 'gallery:portfolio_list' %}?category={{ cat.slug }}"
+        hx-target="#portfolio-container"
+        hx-push-url="true">
+        {{ cat.name }}
+    </button>
+    {% endfor %}
+</div>
+
+<!-- Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-grid-gutter items-start">
+    {% for item in portfolio_items %}
+    <div
+        class="aspect-3/4 relative overflow-hidden rounded group cursor-pointer {% cycle '' 'mt-8' '' 'mt-8' %}"
+        hx-get="{% url 'gallery:portfolio_detail' item.uid %}"
+        hx-target="#lightbox-content">
+        <img
+            src="{{ item.preview_file.url }}"
+            alt="{{ item.title }}"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+    </div>
+    {% empty %}
+    <p class="col-span-full text-center text-lumi-on-surface-variant font-lumi-body py-16">No portfolio images found.</p>
+    {% endfor %}
+</div>

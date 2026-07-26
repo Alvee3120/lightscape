@@ -2,14 +2,16 @@
 {% block title %}Contact | LightScape{% endblock %}
 {% block content %}
 
-<section class="container mx-auto px-6 py-16 lg:py-24">
-    <div class="grid lg:grid-cols-2 gap-14">
+<section class="max-w-7xl mx-auto px-margin-mobile md:px-grid-gutter py-section-gap">
+    <div class="grid lg:grid-cols-2 gap-grid-gutter">
 
         <!-- Info -->
         <div>
-            <p class="font-mono text-sm opacity-50 mb-2">Contact</p>
-            <h1 class="text-4xl md:text-5xl font-bold mb-6">Tell me about the light you need.</h1>
-            <p class="opacity-80 mb-10">
+            <p class="font-lumi-body text-xs text-lumi-secondary uppercase tracking-widest mb-4 opacity-80">Contact</p>
+            <h1 class="font-lumi-display text-lumi-display-mobile md:text-lumi-headline-lg text-lumi-on-background mb-6">
+                Tell me about the light you need.
+            </h1>
+            <p class="font-lumi-body text-lumi-body-lg text-lumi-on-surface-variant mb-10">
                 Bookings open quarterly, licensing enquiries answered daily. Expect a reply within
                 two business days.
             </p>
@@ -17,23 +19,23 @@
             <div class="space-y-6">
                 {% if contact_info.studio_location %}
                 <div>
-                    <h3 class="font-bold mb-1">Studio</h3>
-                    <p class="opacity-70">{{ contact_info.studio_location }}</p>
+                    <h3 class="font-lumi-display text-lg text-lumi-on-background mb-1">Studio</h3>
+                    <p class="font-lumi-body text-lumi-on-surface-variant">{{ contact_info.studio_location }}</p>
                 </div>
                 {% endif %}
                 {% if contact_info.email %}
                 <div>
-                    <h3 class="font-bold mb-1">Email</h3>
-                    <p class="opacity-70">
-                        <a href="mailto:{{ contact_info.email }}" class="hover:opacity-100">{{ contact_info.email }}</a>
+                    <h3 class="font-lumi-display text-lg text-lumi-on-background mb-1">Email</h3>
+                    <p class="font-lumi-body text-lumi-on-surface-variant">
+                        <a href="mailto:{{ contact_info.email }}" class="hover:text-lumi-primary transition-colors">{{ contact_info.email }}</a>
                     </p>
                 </div>
                 {% endif %}
                 {% if contact_info.phone %}
                 <div>
-                    <h3 class="font-bold mb-1">Phone</h3>
-                    <p class="opacity-70">
-                        <a href="tel:{{ contact_info.phone }}" class="hover:opacity-100">{{ contact_info.phone }}</a>
+                    <h3 class="font-lumi-display text-lg text-lumi-on-background mb-1">Phone</h3>
+                    <p class="font-lumi-body text-lumi-on-surface-variant">
+                        <a href="tel:{{ contact_info.phone }}" class="hover:text-lumi-primary transition-colors">{{ contact_info.phone }}</a>
                     </p>
                 </div>
                 {% endif %}
@@ -42,37 +44,40 @@
 
         <!-- Form -->
         <div>
-            <form method="post" class="bg-base-200 rounded-lg p-8 space-y-5">
+            <form method="post" class="bg-lumi-surface-container-low rounded-lg p-8 space-y-5">
                 {% csrf_token %}
 
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Name</span></label>
+                <div>
+                    <label class="block font-lumi-body text-xs text-lumi-on-surface-variant uppercase tracking-widest mb-2">Name</label>
                     <input
                         type="text"
                         name="name"
                         required
-                        class="input input-bordered w-full" />
+                        class="w-full px-4 py-3 rounded-lg bg-lumi-surface border border-white/20 text-lumi-on-background font-lumi-body focus:outline-none focus:border-lumi-primary transition-colors" />
                 </div>
 
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Email</span></label>
+                <div>
+                    <label class="block font-lumi-body text-xs text-lumi-on-surface-variant uppercase tracking-widest mb-2">Email</label>
                     <input
                         type="email"
                         name="email"
                         required
-                        class="input input-bordered w-full" />
+                        class="w-full px-4 py-3 rounded-lg bg-lumi-surface border border-white/20 text-lumi-on-background font-lumi-body focus:outline-none focus:border-lumi-primary transition-colors" />
                 </div>
 
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Message</span></label>
+                <div>
+                    <label class="block font-lumi-body text-xs text-lumi-on-surface-variant uppercase tracking-widest mb-2">Message</label>
                     <textarea
                         name="message"
                         rows="6"
                         required
-                        class="textarea textarea-bordered w-full"></textarea>
+                        class="w-full px-4 py-3 rounded-lg bg-lumi-surface border border-white/20 text-lumi-on-background font-lumi-body focus:outline-none focus:border-lumi-primary transition-colors"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-full">Send Message</button>
+                <button type="submit"
+                        class="w-full px-8 py-3 rounded-full bg-lumi-primary text-lumi-on-primary font-lumi-body font-medium hover:bg-lumi-primary-fixed transition-colors">
+                    Send Message
+                </button>
             </form>
         </div>
 

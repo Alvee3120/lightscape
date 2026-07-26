@@ -1,0 +1,17 @@
+<div class="bg-lumi-surface-container-low rounded-lg overflow-hidden">
+    <img src="{{ item.preview_file.url }}" alt="{{ item.title }}" class="w-full max-h-[75vh] object-contain bg-black" />
+    <div class="p-5">
+        <h2 class="font-lumi-display text-xl text-lumi-on-background">{{ item.title }}</h2>
+        {% if item.description %}
+        <p class="text-lumi-on-surface-variant font-lumi-body mt-1">{{ item.description }}</p>
+        {% endif %}
+        <div class="flex items-center gap-2 mt-4 flex-wrap">
+            {% if item.category %}
+            <span class="px-3 py-1 rounded-full border border-white/20 text-lumi-on-surface-variant font-lumi-body text-xs uppercase tracking-widest">{{ item.category.name }}</span>
+            {% endif %}
+            {% for tag in item.tags.all %}
+            <span class="px-3 py-1 rounded-full border border-white/20 text-lumi-on-surface-variant font-lumi-body text-xs uppercase tracking-widest">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>

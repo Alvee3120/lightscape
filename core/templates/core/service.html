@@ -1,43 +1,52 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Services | LightScape{% endblock %}
 {% block content %}
 
 <!-- Hero -->
-<div
-    class="hero min-h-[60vh] relative"
-    {% if hero_item %}style="background-image: url('{{ hero_item.preview_file.url }}'); background-size: cover; background-position: center;"{% endif %}>
-    <div class="hero-overlay bg-opacity-60"></div>
-    <div class="relative w-full">
-        <div class="container mx-auto px-6">
-            <div class="max-w-xl text-neutral-content">
-                <p class="font-mono text-sm opacity-70 mb-2">Services</p>
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">Sessions, campaigns and licensing</h1>
-                <p class="text-lg opacity-90">
-                    Clear scope, clear pricing. Every package includes hand-graded frames and a
-                    private delivery gallery.
-                </p>
-            </div>
+<section class="relative min-h-[60vh] -mt-24 flex flex-col justify-end pt-32 pb-16 px-margin-mobile md:px-grid-gutter overflow-hidden">
+    <div class="absolute inset-0 z-0">
+    <img
+        src="{% static 'img/services-hero.jpg' %}"
+        alt="Services"
+        class="w-full h-full object-cover object-top opacity-60" />
+
+    <div class="absolute inset-0 hero-gradient"></div>
+</div>
+    <div class="relative z-10 max-w-7xl mx-auto w-full">
+        <div class="max-w-xl">
+            <p class="font-lumi-body text-xs text-lumi-secondary uppercase tracking-widest mb-4 opacity-80">Services</p>
+            <h1 class="font-lumi-display text-lumi-display-mobile md:text-lumi-headline-lg text-lumi-on-background mb-4">
+                Sessions, campaigns and licensing
+            </h1>
+            <p class="font-lumi-body text-lumi-body-lg text-lumi-on-surface-variant">
+                Clear scope, clear pricing. Every package includes hand-graded frames and a
+                private delivery gallery.
+            </p>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Packages -->
-<section class="container mx-auto px-6 py-16 lg:py-24">
-    <div class="grid md:grid-cols-3 gap-8">
+<section class="max-w-7xl mx-auto px-margin-mobile md:px-grid-gutter py-section-gap">
+    <div class="grid md:grid-cols-3 gap-grid-gutter">
 
         {% for plan in plans %}
-        <div class="card bg-base-200 shadow-md p-8 flex flex-col{% if plan.is_featured %} border-2 border-primary relative{% endif %}">
+        <div class="bg-lumi-surface-container-low rounded-lg p-8 flex flex-col relative{% if plan.is_featured %} border-2 border-lumi-primary{% endif %}">
             {% if plan.is_featured %}
-            <span class="badge badge-primary absolute -top-3 left-8">{{ plan.badge_text }}</span>
+            <span class="absolute -top-3 left-8 px-3 py-1 rounded-full bg-lumi-primary text-lumi-on-primary font-lumi-body text-xs uppercase tracking-widest">{{ plan.badge_text }}</span>
             {% endif %}
-            <h3 class="text-xl font-bold mb-1">{{ plan.name }}</h3>
-            <p class="text-2xl font-bold mb-6">{% if plan.price_prefix %}{{ plan.price_prefix }} {% endif %}${{ plan.display_price }}<span class="text-sm font-normal opacity-60"> / {{ plan.get_unit_display|lower }}</span></p>
-            <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
+            <h3 class="font-lumi-display text-xl text-lumi-on-background mb-1">{{ plan.name }}</h3>
+            <p class="font-lumi-display text-2xl text-lumi-on-background mb-6">{% if plan.price_prefix %}{{ plan.price_prefix }} {% endif %}${{ plan.display_price }}<span class="font-lumi-body text-sm text-lumi-on-surface-variant"> / {{ plan.get_unit_display|lower }}</span></p>
+            <ul class="space-y-3 mb-8 font-lumi-body text-sm text-lumi-on-surface-variant flex-1">
                 {% for feature in plan.features.all %}
-                <li class="border-t border-base-content/10 pt-3">{{ feature.text }}</li>
+                <li class="border-t border-white/10 pt-3">{{ feature.text }}</li>
                 {% endfor %}
             </ul>
-            <a href="{% url 'contact' %}" class="btn {% if plan.is_featured %}btn-primary{% else %}btn-outline{% endif %} btn-block">Enquire</a>
+            <a href="{% url 'contact' %}"
+               class="text-center px-6 py-3 rounded-full font-lumi-body transition-colors {% if plan.is_featured %}bg-lumi-primary text-lumi-on-primary hover:bg-lumi-primary-fixed{% else %}border border-white/20 text-lumi-on-background hover:border-lumi-primary hover:text-lumi-primary{% endif %}">
+                Enquire
+            </a>
         </div>
         {% endfor %}
 
@@ -45,30 +54,33 @@
 </section>
 
 <!-- Digital licensing -->
-<section class="bg-base-200">
-    <div class="container mx-auto px-6 py-16 lg:py-24">
-        <p class="font-mono text-sm opacity-50 mb-2">Digital licensing</p>
-        <h2 class="text-3xl md:text-4xl font-bold mb-10">Buy a frame, not a headache</h2>
+<section class="bg-lumi-surface-container-low">
+    <div class="max-w-7xl mx-auto px-margin-mobile md:px-grid-gutter py-section-gap">
+        <p class="font-lumi-body text-xs text-lumi-secondary uppercase tracking-widest mb-2 opacity-80">Digital licensing</p>
+        <h2 class="font-lumi-display text-lumi-headline-lg text-lumi-on-background mb-10">Buy a frame, not a headache</h2>
 
-        <div class="grid sm:grid-cols-3 gap-10 mb-10">
+        <div class="grid sm:grid-cols-3 gap-grid-gutter mb-10">
             <div>
-                <h3 class="text-lg font-bold mb-1">Personal</h3>
-                <p class="text-xl font-bold mb-3">Free</p>
-                <p class="opacity-70 text-sm">Wallpapers, prints for your own wall, social posts.</p>
+                <h3 class="font-lumi-display text-lg text-lumi-on-background mb-1">Personal</h3>
+                <p class="font-lumi-display text-xl text-lumi-secondary mb-3">Free</p>
+                <p class="font-lumi-body text-sm text-lumi-on-surface-variant">Wallpapers, prints for your own wall, social posts.</p>
             </div>
             <div>
-                <h3 class="text-lg font-bold mb-1">Standard</h3>
-                <p class="text-xl font-bold mb-3">$24 – $45</p>
-                <p class="opacity-70 text-sm">Websites, blogs, small-run print up to 5,000 copies.</p>
+                <h3 class="font-lumi-display text-lg text-lumi-on-background mb-1">Standard</h3>
+                <p class="font-lumi-display text-xl text-lumi-secondary mb-3">$24 – $45</p>
+                <p class="font-lumi-body text-sm text-lumi-on-surface-variant">Websites, blogs, small-run print up to 5,000 copies.</p>
             </div>
             <div>
-                <h3 class="text-lg font-bold mb-1">Extended</h3>
-                <p class="text-xl font-bold mb-3">$180</p>
-                <p class="opacity-70 text-sm">Advertising, packaging, resale products, unlimited print.</p>
+                <h3 class="font-lumi-display text-lg text-lumi-on-background mb-1">Extended</h3>
+                <p class="font-lumi-display text-xl text-lumi-secondary mb-3">$180</p>
+                <p class="font-lumi-body text-sm text-lumi-on-surface-variant">Advertising, packaging, resale products, unlimited print.</p>
             </div>
         </div>
 
-        <a href="{% url 'gallery:gallery_list' %}" class="btn btn-outline">Browse licensable frames</a>
+        <a href="{% url 'gallery:gallery_list' %}"
+           class="inline-block px-8 py-3 rounded-full border border-white/20 text-lumi-on-background hover:border-lumi-primary hover:text-lumi-primary transition-colors font-lumi-body">
+            Browse licensable frames
+        </a>
     </div>
 </section>
 

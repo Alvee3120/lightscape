@@ -1,20 +1,20 @@
-<div class="flex flex-wrap gap-2 mb-6">
+<div class="flex flex-wrap gap-6 mb-8">
     <button
-        class="btn btn-sm {% if not active_pricing %}btn-primary{% else %}btn-outline{% endif %}"
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if not active_pricing %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
         hx-get="{% url 'home_storefront_filter' %}"
         hx-target="#home-storefront-container"
         hx-swap="innerHTML">
         All
     </button>
     <button
-        class="btn btn-sm {% if active_pricing == 'free' %}btn-primary{% else %}btn-outline{% endif %}"
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if active_pricing == 'free' %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
         hx-get="{% url 'home_storefront_filter' %}?pricing=free"
         hx-target="#home-storefront-container"
         hx-swap="innerHTML">
         Free
     </button>
     <button
-        class="btn btn-sm {% if active_pricing == 'paid' %}btn-primary{% else %}btn-outline{% endif %}"
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if active_pricing == 'paid' %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
         hx-get="{% url 'home_storefront_filter' %}?pricing=paid"
         hx-target="#home-storefront-container"
         hx-swap="innerHTML">
@@ -22,30 +22,28 @@
     </button>
 </div>
 
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-grid-gutter">
     {% for asset in assets %}
     <div
-        class="card bg-base-200 shadow-md hover:shadow-xl transition cursor-pointer group overflow-hidden"
+        class="relative aspect-4/5 overflow-hidden rounded-lg bg-lumi-surface-container-low cursor-pointer group"
         hx-get="{% url 'gallery:asset_detail' asset.uid %}"
         hx-target="#lightbox-content">
-        <figure class="relative overflow-hidden aspect-[4/5]">
-            <img
-                src="{{ asset.preview_file.url }}"
-                alt="{{ asset.title }}"
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-            <div class="absolute top-2 right-2">
+        <img
+            src="{{ asset.preview_file.url }}"
+            alt="{{ asset.title }}"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <div class="absolute inset-0 card-gradient flex flex-col justify-end p-4">
+            <div class="flex justify-between items-end gap-2">
+                <h3 class="font-lumi-display text-lg text-lumi-on-background truncate">{{ asset.title }}</h3>
                 {% if asset.is_free %}
-                <span class="badge badge-success text-white">Free</span>
+                <span class="shrink-0 px-3 py-1 bg-green-400/20 text-green-400 border border-green-400/30 rounded-full font-lumi-body text-[11px] uppercase tracking-widest">Free</span>
                 {% else %}
-                <span class="badge badge-warning">${{ asset.price }}</span>
+                <span class="shrink-0 px-3 py-1 bg-lumi-primary/20 text-lumi-primary border border-lumi-primary/30 rounded-full font-lumi-body text-[11px] tracking-widest">${{ asset.price }}</span>
                 {% endif %}
             </div>
-        </figure>
-        <div class="card-body p-3">
-            <h3 class="text-sm font-semibold truncate">{{ asset.title }}</h3>
         </div>
     </div>
     {% empty %}
-    <p class="col-span-full text-center opacity-60 py-16">No images found.</p>
+    <p class="col-span-full text-center text-lumi-on-surface-variant font-lumi-body py-16">No images found.</p>
     {% endfor %}
 </div>

@@ -1,6 +1,6 @@
-<div class="flex flex-wrap gap-2 mb-6">
+<div class="flex flex-wrap gap-6 mb-8">
     <button
-        class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline{% endif %}"
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if not active_category %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
         hx-get="{% url 'home_portfolio_filter' %}"
         hx-target="#home-portfolio-container"
         hx-swap="innerHTML">
@@ -8,7 +8,7 @@
     </button>
     {% for cat in categories %}
     <button
-        class="btn btn-sm {% if active_category == cat.slug %}btn-primary{% else %}btn-outline{% endif %}"
+        class="font-lumi-body text-sm uppercase tracking-widest pb-1 border-b transition-colors {% if active_category == cat.slug %}text-lumi-primary border-lumi-primary{% else %}text-lumi-on-surface-variant border-transparent hover:text-lumi-primary{% endif %}"
         hx-get="{% url 'home_portfolio_filter' %}?category={{ cat.slug }}"
         hx-target="#home-portfolio-container"
         hx-swap="innerHTML">
@@ -17,17 +17,18 @@
     {% endfor %}
 </div>
 
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-grid-gutter items-start">
     {% for item in portfolio_items %}
-    <div class="rounded-lg overflow-hidden group">
-        <figure class="aspect-[4/5] overflow-hidden">
-            <img
-                src="{{ item.preview_file.url }}"
-                alt="{{ item.title }}"
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-        </figure>
+    <div
+        class="aspect-3/4 relative overflow-hidden rounded group cursor-pointer {% cycle '' 'mt-8' '' 'mt-8' %}"
+        hx-get="{% url 'gallery:portfolio_detail' item.uid %}"
+        hx-target="#lightbox-content">
+        <img
+            src="{{ item.preview_file.url }}"
+            alt="{{ item.title }}"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
     </div>
     {% empty %}
-    <p class="col-span-full text-center opacity-60 py-16">No portfolio images found.</p>
+    <p class="col-span-full text-center text-lumi-on-surface-variant font-lumi-body py-16">No portfolio images found.</p>
     {% endfor %}
 </div>

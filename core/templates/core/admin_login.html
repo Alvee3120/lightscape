@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}Admin Login | LightScape{% endblock %}
 {% block content %}
-<div class="min-h-[70vh] flex items-center justify-center px-6">
-    <div class="card w-full max-w-sm bg-base-200 shadow-xl">
-        <div class="card-body">
-            <h2 class="text-2xl font-bold text-center mb-4">Photographer Login</h2>
-            <form method="POST">
-                {% csrf_token %}
-                {% if form.errors %}
-                <p class="text-error text-sm mb-3">Invalid username or password.</p>
-                {% endif %}
-                <div class="form-control mb-3">
-                    <label class="label"><span class="label-text">Username</span></label>
-                    <input type="text" name="username" class="input input-bordered w-full" required>
-                </div>
-                <div class="form-control mb-4">
-                    <label class="label"><span class="label-text">Password</span></label>
-                    <input type="password" name="password" class="input input-bordered w-full" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-full">Login</button>
-            </form>
-        </div>
+<div class="min-h-[70vh] flex items-center justify-center px-margin-mobile">
+    <div class="w-full max-w-sm bg-lumi-surface-container-low rounded-lg p-8">
+        <h2 class="font-lumi-display text-2xl text-lumi-on-background text-center mb-6">Photographer Login</h2>
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+            {% if form.errors %}
+            <p class="font-lumi-body text-sm text-red-400 -mt-2">Invalid username or password.</p>
+            {% endif %}
+            <div>
+                <label class="block font-lumi-body text-xs text-lumi-on-surface-variant uppercase tracking-widest mb-2">Username</label>
+                <input type="text" name="username" required
+                       class="w-full px-4 py-3 rounded-lg bg-lumi-surface border border-white/20 text-lumi-on-background font-lumi-body focus:outline-none focus:border-lumi-primary transition-colors">
+            </div>
+            <div>
+                <label class="block font-lumi-body text-xs text-lumi-on-surface-variant uppercase tracking-widest mb-2">Password</label>
+                <input type="password" name="password" required
+                       class="w-full px-4 py-3 rounded-lg bg-lumi-surface border border-white/20 text-lumi-on-background font-lumi-body focus:outline-none focus:border-lumi-primary transition-colors">
+            </div>
+            <button type="submit"
+                    class="w-full px-8 py-3 rounded-full bg-lumi-primary text-lumi-on-primary font-lumi-body font-medium hover:bg-lumi-primary-fixed transition-colors">
+                Login
+            </button>
+        </form>
     </div>
 </div>
 {% endblock %}

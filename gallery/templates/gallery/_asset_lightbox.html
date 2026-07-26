@@ -1,26 +1,32 @@
-<div class="bg-base-200 rounded-lg overflow-hidden">
+<div class="bg-lumi-surface-container-low rounded-lg overflow-hidden">
     <img src="{{ asset.preview_file.url }}" alt="{{ asset.title }}" class="w-full max-h-[75vh] object-contain bg-black" />
     <div class="p-5">
-        <h2 class="text-2xl font-bold">{{ asset.title }}</h2>
-        <p class="opacity-70 mt-1">{{ asset.description }}</p>
-        <div class="flex items-center justify-between mt-4">
-            <div class="flex gap-2">
+        <h2 class="font-lumi-display text-xl text-lumi-on-background">{{ asset.title }}</h2>
+        {% if asset.description %}
+        <p class="text-lumi-on-surface-variant font-lumi-body mt-1">{{ asset.description }}</p>
+        {% endif %}
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-4">
+            <div class="flex gap-2 flex-wrap">
                 {% for tag in asset.tags.all %}
-                <span class="badge badge-outline">{{ tag.name }}</span>
+                <span class="px-3 py-1 rounded-full border border-white/20 text-lumi-on-surface-variant font-lumi-body text-xs uppercase tracking-widest">{{ tag.name }}</span>
                 {% endfor %}
             </div>
             {% if asset.is_free %}
-<a href="{% url 'orders:request_free_download' asset.uid %}" class="btn btn-success text-white">
-    Download Free
-</a>
-{% else %}
-<form action="{% url 'orders:create_checkout_session' asset.uid %}" method="POST" class="flex gap-2">
-    {% csrf_token %}
-    <input type="email" name="email" placeholder="your@email.com" required
-           class="input input-bordered input-sm" />
-    <button type="submit" class="btn btn-warning">Buy for ${{ asset.price }}</button>
-</form>
-{% endif %}
+            <a href="{% url 'orders:request_free_download' asset.uid %}"
+               class="px-6 py-2 rounded-full bg-green-400/20 text-green-400 border border-green-400/30 font-lumi-body text-sm uppercase tracking-widest hover:bg-green-400/30 transition-colors">
+                Download Free
+            </a>
+            {% else %}
+            <form action="{% url 'orders:create_checkout_session' asset.uid %}" method="POST" class="flex flex-wrap gap-2">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="your@email.com" required
+                       class="px-4 py-2 rounded-full bg-lumi-surface border border-white/20 text-lumi-on-background font-lumi-body text-sm placeholder:text-lumi-on-surface-variant focus:outline-none focus:border-lumi-primary" />
+                <button type="submit"
+                        class="px-6 py-2 rounded-full bg-lumi-primary text-lumi-on-primary font-lumi-body text-sm font-medium hover:bg-lumi-primary-fixed transition-colors">
+                    Buy for ${{ asset.price }}
+                </button>
+            </form>
+            {% endif %}
         </div>
     </div>
 </div>

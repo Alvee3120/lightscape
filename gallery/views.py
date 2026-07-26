@@ -86,11 +86,35 @@ def gallery_list(request):
     return render(request, 'gallery/gallery_list.html', context)
 
 
+def portfolio_list(request):
+    category_slug = request.GET.get('category')
+    items = Portfolio.objects.filter(is_published=True)
+
+    if category_slug:
+        items = items.filter(category__slug=category_slug)
+
+    context = {
+        'portfolio_items': items,
+        'categories': Category.objects.all(),
+        'active_category': category_slug,
+    }
+
+    if request.htmx:
+        return render(request, 'gallery/_portfolio_content.html', context)
+
+    return render(request, 'gallery/portfolio_list.html', context)
+
+
 def asset_detail(request, uid):
     asset = get_object_or_404(Asset, uid=uid, is_published=True)
     asset.view_count += 1
     asset.save(update_fields=['view_count'])
     return render(request, 'gallery/_asset_lightbox.html', {'asset': asset})
+
+
+def portfolio_detail(request, uid):
+    item = get_object_or_404(Portfolio, uid=uid, is_published=True)
+    return render(request, 'gallery/_portfolio_lightbox.html', {'item': item})
 
 
 @login_required(login_url='/admin-login/')

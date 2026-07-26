@@ -7,8 +7,8 @@
 
     <div class="grid md:grid-cols-3 gap-2 mb-6">
         <div class="form-control md:col-span-1">
-            <label class="label"><span class="label-text">Category (optional, applies to all in this batch)</span></label>
-            <select id="batch-category" class="select select-bordered select-sm">
+            <label class="label whitespace-normal"><span class="label-text">Category (optional, applies to all in this batch)</span></label>
+            <select id="batch-category" class="select select-bordered select-sm w-full">
                 <option value="">No category</option>
                 {% for cat in categories %}
                 <option value="{{ cat.id }}">{{ cat.name }}</option>

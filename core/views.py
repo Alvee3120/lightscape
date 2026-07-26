@@ -21,6 +21,8 @@ def home(request):
     context = {
         'hero_item': hero_item,
         'categories': Category.objects.all(),
+        'assets': Asset.objects.filter(is_published=True)[:HOME_PREVIEW_LIMIT],
+        'portfolio_items': Portfolio.objects.filter(is_published=True)[:HOME_PREVIEW_LIMIT],
     }
     return render(request, 'core/home.html', context)
 

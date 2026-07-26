@@ -5,6 +5,8 @@ app_name = 'gallery'
 
 urlpatterns = [
     path('', views.gallery_list, name='gallery_list'),
+    path('portfolio/', views.portfolio_list, name='portfolio_list'),
+    path('portfolio/<uuid:uid>/', views.portfolio_detail, name='portfolio_detail'),
     path('asset/<uuid:uid>/', views.asset_detail, name='asset_detail'),
     path('upload/', views.upload_page, name='upload_page'),
     path('upload/submit/', views.upload_asset, name='upload_asset'),

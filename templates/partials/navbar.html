@@ -1,35 +1,47 @@
 {% load static %}
-<div class="navbar bg-base-200 shadow-md px-4 md:px-6 sticky top-0 z-50">
-    <div class="navbar-start gap-2">
-        <div class="dropdown md:hidden">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-sm px-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 rounded-box z-50 mt-3 w-40 p-2 shadow">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'service' %}">Service</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-            </ul>
-        </div>
-        <a href="{% url 'home' %}" class="flex items-center gap-2">
-            <img src="{% static 'img/logo-placeholder.svg' %}" alt="LightScape" class="h-9 w-9 rounded-full" />
-            <span class="text-xl font-bold tracking-wide">LightScape</span>
+<nav class="fixed top-0 w-full z-50 glass-nav border-b border-white/10" x-data="{ open: false }">
+    <div class="flex justify-between items-center px-margin-mobile md:px-grid-gutter py-6 max-w-7xl mx-auto">
+        <a href="{% url 'home' %}" class="font-lumi-display text-2xl text-lumi-primary tracking-tighter flex items-center gap-2 group">
+            <span class="w-8 h-8 rounded-full bg-lumi-primary text-lumi-on-primary flex items-center justify-center font-sans font-bold text-sm transition-transform group-hover:scale-105">L</span>
+            LightScape
         </a>
-    </div>
 
-    <div class="navbar-center hidden md:flex">
-        <div class="flex gap-1">
-            <a href="{% url 'home' %}" class="btn btn-ghost btn-sm">Home</a>
-            <a href="{% url 'about' %}" class="btn btn-ghost btn-sm">About</a>
-            <a href="{% url 'service' %}" class="btn btn-ghost btn-sm">Service</a>
-            <a href="{% url 'contact' %}" class="btn btn-ghost btn-sm">Contact</a>
+        <div class="hidden md:flex items-center gap-8">
+            <a href="{% url 'home' %}"
+               class="font-lumi-body text-sm uppercase tracking-widest transition-colors duration-300 pb-1 {% if request.resolver_match.url_name == 'home' %}text-lumi-primary border-b border-lumi-primary{% else %}text-lumi-on-surface-variant hover:text-lumi-primary{% endif %}">
+                Home
+            </a>
+            <a href="{% url 'about' %}"
+               class="font-lumi-body text-sm uppercase tracking-widest transition-colors duration-300 pb-1 {% if request.resolver_match.url_name == 'about' %}text-lumi-primary border-b border-lumi-primary{% else %}text-lumi-on-surface-variant hover:text-lumi-primary{% endif %}">
+                About
+            </a>
+            <a href="{% url 'service' %}"
+               class="font-lumi-body text-sm uppercase tracking-widest transition-colors duration-300 pb-1 {% if request.resolver_match.url_name == 'service' %}text-lumi-primary border-b border-lumi-primary{% else %}text-lumi-on-surface-variant hover:text-lumi-primary{% endif %}">
+                Service
+            </a>
+            <a href="{% url 'contact' %}"
+               class="font-lumi-body text-sm uppercase tracking-widest transition-colors duration-300 pb-1 {% if request.resolver_match.url_name == 'contact' %}text-lumi-primary border-b border-lumi-primary{% else %}text-lumi-on-surface-variant hover:text-lumi-primary{% endif %}">
+                Contact
+            </a>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <a href="{% url 'service' %}"
+               class="hidden md:block px-6 py-2 rounded-full border border-lumi-primary text-lumi-primary hover:bg-lumi-primary hover:text-lumi-on-primary transition-colors font-lumi-body text-xs uppercase tracking-widest">
+                Book Now
+            </a>
+            <button class="md:hidden text-lumi-primary" @click="open = !open" aria-label="Toggle menu">
+                <span class="material-symbols-outlined" x-text="open ? 'close' : 'menu'">menu</span>
+            </button>
         </div>
     </div>
 
-    <div class="navbar-end">
-        <a href="{% url 'service' %}" class="btn btn-primary btn-sm">Book Now</a>
+    <div x-show="open" x-cloak @click.outside="open = false"
+         class="md:hidden border-t border-white/10 bg-lumi-surface-container-lowest px-margin-mobile py-6 flex flex-col gap-4">
+        <a href="{% url 'home' %}" class="font-lumi-body text-sm uppercase tracking-widest {% if request.resolver_match.url_name == 'home' %}text-lumi-primary{% else %}text-lumi-on-surface-variant{% endif %}">Home</a>
+        <a href="{% url 'about' %}" class="font-lumi-body text-sm uppercase tracking-widest {% if request.resolver_match.url_name == 'about' %}text-lumi-primary{% else %}text-lumi-on-surface-variant{% endif %}">About</a>
+        <a href="{% url 'service' %}" class="font-lumi-body text-sm uppercase tracking-widest {% if request.resolver_match.url_name == 'service' %}text-lumi-primary{% else %}text-lumi-on-surface-variant{% endif %}">Service</a>
+        <a href="{% url 'contact' %}" class="font-lumi-body text-sm uppercase tracking-widest {% if request.resolver_match.url_name == 'contact' %}text-lumi-primary{% else %}text-lumi-on-surface-variant{% endif %}">Contact</a>
+        <a href="{% url 'service' %}" class="mt-2 px-6 py-2 rounded-full border border-lumi-primary text-lumi-primary text-center font-lumi-body text-xs uppercase tracking-widest">Book Now</a>
     </div>
-</div>
+</nav>

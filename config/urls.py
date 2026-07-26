@@ -10,7 +10,7 @@ urlpatterns = [
     path('gallery/', include('gallery.urls')),
     path('orders/', include('orders.urls')),
 
-    path('admin-login/', auth_views.LoginView.as_view(template_name='core/admin_login.html'), name='admin_login'),
+    path('admin-login/', auth_views.LoginView.as_view(template_name='core/admin_login.html', redirect_authenticated_user=True), name='admin_login'),
     path('admin-logout/', auth_views.LogoutView.as_view(next_page='admin_login'), name='admin_logout'),
     
     path('', include('core.urls')),
