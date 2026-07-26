@@ -6,4 +6,5 @@ __pycache__/
 db.sqlite3
 /static/css/output.css
 /mediafiles/
+/staticfiles/
 .DS_Store
