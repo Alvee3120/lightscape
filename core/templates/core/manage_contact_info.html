@@ -1,0 +1,44 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Contact Info | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <h1 class="text-3xl font-bold mb-8">Contact Info</h1>
+
+    <form method="post" class="bg-base-200 rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Studio Location</span></label>
+            <input
+                type="text"
+                name="studio_location"
+                value="{{ info.studio_location }}"
+                class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Email</span></label>
+            <input
+                type="email"
+                name="email"
+                value="{{ info.email }}"
+                class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Phone</span></label>
+            <input
+                type="text"
+                name="phone"
+                value="{{ info.phone }}"
+                class="input input-bordered w-full" />
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

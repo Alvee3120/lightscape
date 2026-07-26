@@ -1,0 +1,113 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Edit Service Plan | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Edit Service Plan</h1>
+        <a href="{% url 'manage_services' %}" class="btn btn-outline btn-sm">Back to Pricing Plans</a>
+    </div>
+
+    <form method="post" class="bg-base-200 rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <div class="grid sm:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Service Name</span></label>
+                <input type="text" name="name" value="{{ plan.name }}" required class="input input-bordered w-full" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Price</span></label>
+                    <input type="number" step="0.01" min="0" name="price" value="{{ plan.price }}" required class="input input-bordered w-full" />
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Per</span></label>
+                    <select name="unit" class="select select-bordered w-full">
+                        <option value="day" {% if plan.unit == 'day' %}selected{% endif %}>Day</option>
+                        <option value="event" {% if plan.unit == 'event' %}selected{% endif %}>Event</option>
+                        <option value="project" {% if plan.unit == 'project' %}selected{% endif %}>Project</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Price Prefix (optional)</span></label>
+                <input type="text" name="price_prefix" value="{{ plan.price_prefix }}" placeholder="e.g. From" class="input input-bordered w-full" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Badge Text</span></label>
+                <input type="text" name="badge_text" value="{{ plan.badge_text }}" class="input input-bordered w-full" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Display Order</span></label>
+                <input type="number" name="order" value="{{ plan.order }}" class="input input-bordered w-full" />
+            </div>
+        </div>
+
+        <label class="label cursor-pointer justify-start gap-3 w-fit">
+            <input type="checkbox" name="is_featured" class="checkbox checkbox-primary" {% if plan.is_featured %}checked{% endif %} />
+            <span class="label-text">Highlight this card (badge + border)</span>
+        </label>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Service Info</span></label>
+            <div id="features-container" class="space-y-2 mb-2">
+                {% for feature in plan.features.all %}
+                <div class="flex gap-2">
+                    <input type="text" name="features[]" value="{{ feature.text }}" class="input input-bordered input-sm w-full" />
+                    <button type="button" class="btn btn-sm btn-square btn-error remove-feature">✕</button>
+                </div>
+                {% empty %}
+                <div class="flex gap-2">
+                    <input type="text" name="features[]" placeholder="e.g. 8 hours on location" class="input input-bordered input-sm w-full" />
+                    <button type="button" class="btn btn-sm btn-square btn-error remove-feature">✕</button>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-feature" class="btn btn-outline btn-sm w-fit">+ Add another line</button>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+const featuresContainer = document.getElementById('features-container');
+const addFeatureBtn = document.getElementById('add-feature');
+
+function featureRow() {
+    const row = document.createElement('div');
+    row.className = 'flex gap-2';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'features[]';
+    input.placeholder = 'e.g. 40 graded frames';
+    input.className = 'input input-bordered input-sm w-full';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn btn-sm btn-square btn-error remove-feature';
+    removeBtn.textContent = '✕';
+    row.appendChild(input);
+    row.appendChild(removeBtn);
+    return row;
+}
+
+addFeatureBtn.addEventListener('click', () => {
+    featuresContainer.appendChild(featureRow());
+});
+
+featuresContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-feature')) {
+        if (featuresContainer.children.length > 1) {
+            e.target.closest('.flex').remove();
+        }
+    }
+});
+</script>
+{% endblock %}

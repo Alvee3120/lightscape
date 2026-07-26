@@ -1,12 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 {% block title %}Portfolio Upload | LightScape{% endblock %}
-{% block content %}
+{% block dashboard_content %}
 <div class="container mx-auto px-6 py-10 max-w-5xl">
 
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold">Portfolio Showcase</h1>
-        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm">Back to Dashboard</a>
-    </div>
+    <h1 class="text-3xl font-bold mb-8">Portfolio Showcase</h1>
 
     <div class="grid md:grid-cols-3 gap-2 mb-6">
         <div class="form-control md:col-span-1">
@@ -41,11 +38,14 @@
         {% for item in portfolio_items %}
         <div class="relative group" id="item-{{ item.id }}">
             <img src="{{ item.preview_file.url }}" class="w-full aspect-square object-cover rounded-lg" alt="{{ item.title }}">
-            <button
-                onclick="deleteItem({{ item.id }})"
-                class="absolute top-1 right-1 btn btn-circle btn-xs btn-error opacity-0 group-hover:opacity-100 transition">
-                ✕
-            </button>
+            <div class="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <a href="{% url 'gallery:portfolio_edit' item.id %}" class="btn btn-circle btn-xs btn-neutral" aria-label="Edit">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </a>
+                <button onclick="deleteItem({{ item.id }})" class="btn btn-circle btn-xs btn-error">✕</button>
+            </div>
             <p class="text-xs truncate mt-1">{{ item.title }}</p>
         </div>
         {% endfor %}
@@ -104,7 +104,14 @@ function uploadFile(file) {
                 card.id = `item-${data.item_id}`;
                 card.innerHTML = `
                     <img src="${data.preview_url}" class="w-full aspect-square object-cover rounded-lg">
-                    <button onclick="deleteItem(${data.item_id})" class="absolute top-1 right-1 btn btn-circle btn-xs btn-error opacity-0 group-hover:opacity-100 transition">✕</button>
+                    <div class="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                        <a href="${data.edit_url}" class="btn btn-circle btn-xs btn-neutral" aria-label="Edit">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </a>
+                        <button onclick="deleteItem(${data.item_id})" class="btn btn-circle btn-xs btn-error">✕</button>
+                    </div>
                     <p class="text-xs truncate mt-1">${data.title}</p>
                 `;
                 portfolioGrid.prepend(card);

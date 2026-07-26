@@ -1,0 +1,23 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Edit Tag | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Edit Tag</h1>
+        <a href="{% url 'gallery:manage_tags' %}" class="btn btn-outline btn-sm">Back to Tags</a>
+    </div>
+
+    <form method="post" class="bg-base-200 rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+        <div class="form-control">
+            <label class="label"><span class="label-text">Name</span></label>
+            <input type="text" name="name" value="{{ tag.name }}" required class="input input-bordered w-full" />
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

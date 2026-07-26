@@ -1,12 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 {% block title %}Site Content | LightScape{% endblock %}
-{% block content %}
+{% block dashboard_content %}
 <div class="container mx-auto px-6 py-10 max-w-3xl">
 
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold">About Page Content</h1>
-        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm">Back to Dashboard</a>
-    </div>
+    <h1 class="text-3xl font-bold mb-8">About Page Content</h1>
 
     <form method="post" enctype="multipart/form-data" class="bg-base-200 rounded-lg p-6 space-y-4">
         {% csrf_token %}

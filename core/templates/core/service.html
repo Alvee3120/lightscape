@@ -25,42 +25,21 @@
 <section class="container mx-auto px-6 py-16 lg:py-24">
     <div class="grid md:grid-cols-3 gap-8">
 
-        <div class="card bg-base-200 shadow-md p-8 flex flex-col">
-            <h3 class="text-xl font-bold mb-1">Editorial Day</h3>
-            <p class="text-2xl font-bold mb-6">$1,400<span class="text-sm font-normal opacity-60"> / day</span></p>
+        {% for plan in plans %}
+        <div class="card bg-base-200 shadow-md p-8 flex flex-col{% if plan.is_featured %} border-2 border-primary relative{% endif %}">
+            {% if plan.is_featured %}
+            <span class="badge badge-primary absolute -top-3 left-8">{{ plan.badge_text }}</span>
+            {% endif %}
+            <h3 class="text-xl font-bold mb-1">{{ plan.name }}</h3>
+            <p class="text-2xl font-bold mb-6">{% if plan.price_prefix %}{{ plan.price_prefix }} {% endif %}${{ plan.display_price }}<span class="text-sm font-normal opacity-60"> / {{ plan.get_unit_display|lower }}</span></p>
             <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
-                <li class="border-t border-base-content/10 pt-3">8 hours on location</li>
-                <li class="border-t border-base-content/10 pt-3">40 graded frames</li>
-                <li class="border-t border-base-content/10 pt-3">Web + print licence</li>
-                <li class="border-t border-base-content/10 pt-3">72h turnaround</li>
+                {% for feature in plan.features.all %}
+                <li class="border-t border-base-content/10 pt-3">{{ feature.text }}</li>
+                {% endfor %}
             </ul>
-            <a href="{% url 'contact' %}" class="btn btn-outline btn-block">Enquire</a>
+            <a href="{% url 'contact' %}" class="btn {% if plan.is_featured %}btn-primary{% else %}btn-outline{% endif %} btn-block">Enquire</a>
         </div>
-
-        <div class="card bg-base-200 shadow-md p-8 flex flex-col border-2 border-primary relative">
-            <span class="badge badge-primary absolute -top-3 left-8">Most booked</span>
-            <h3 class="text-xl font-bold mb-1">Wedding Story</h3>
-            <p class="text-2xl font-bold mb-6">$3,200<span class="text-sm font-normal opacity-60"> / event</span></p>
-            <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
-                <li class="border-t border-base-content/10 pt-3">Full-day coverage, two shooters</li>
-                <li class="border-t border-base-content/10 pt-3">400+ graded frames</li>
-                <li class="border-t border-base-content/10 pt-3">Private online gallery</li>
-                <li class="border-t border-base-content/10 pt-3">Hand-bound 40pp album</li>
-            </ul>
-            <a href="{% url 'contact' %}" class="btn btn-primary btn-block">Enquire</a>
-        </div>
-
-        <div class="card bg-base-200 shadow-md p-8 flex flex-col">
-            <h3 class="text-xl font-bold mb-1">Brand Campaign</h3>
-            <p class="text-2xl font-bold mb-6">From $5,000<span class="text-sm font-normal opacity-60"> / project</span></p>
-            <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
-                <li class="border-t border-base-content/10 pt-3">Concept + art direction</li>
-                <li class="border-t border-base-content/10 pt-3">Studio &amp; location</li>
-                <li class="border-t border-base-content/10 pt-3">Retouched hero set</li>
-                <li class="border-t border-base-content/10 pt-3">Unlimited usage</li>
-            </ul>
-            <a href="{% url 'contact' %}" class="btn btn-outline btn-block">Enquire</a>
-        </div>
+        {% endfor %}
 
     </div>
 </section>

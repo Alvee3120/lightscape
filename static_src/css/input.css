@@ -1,2 +1,28 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.dashboard-sidebar {
+    width: 16rem;
+    transition: width 0.15s ease;
+    overflow-x: hidden;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-collapsed .dashboard-sidebar {
+    width: 4.5rem;
+}
+
+.sidebar-collapsed .sidebar-label {
+    display: none;
+}
+
+.sidebar-collapsed .dashboard-sidebar .menu {
+    width: 100%;
+}
+
+.sidebar-collapsed .sidebar-toggle-icon {
+    transform: rotate(180deg);
+}

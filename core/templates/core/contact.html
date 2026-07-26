@@ -15,22 +15,28 @@
             </p>
 
             <div class="space-y-6">
+                {% if contact_info.studio_location %}
                 <div>
                     <h3 class="font-bold mb-1">Studio</h3>
-                    <p class="opacity-70">Pier 24, San Francisco, CA</p>
+                    <p class="opacity-70">{{ contact_info.studio_location }}</p>
                 </div>
+                {% endif %}
+                {% if contact_info.email %}
                 <div>
                     <h3 class="font-bold mb-1">Email</h3>
                     <p class="opacity-70">
-                        <a href="mailto:hello@lumenatlas.studio" class="hover:opacity-100">hello@lumenatlas.studio</a>
+                        <a href="mailto:{{ contact_info.email }}" class="hover:opacity-100">{{ contact_info.email }}</a>
                     </p>
                 </div>
+                {% endif %}
+                {% if contact_info.phone %}
                 <div>
                     <h3 class="font-bold mb-1">Phone</h3>
                     <p class="opacity-70">
-                        <a href="tel:+14155550184" class="hover:opacity-100">+1 (415) 555-0184</a>
+                        <a href="tel:{{ contact_info.phone }}" class="hover:opacity-100">{{ contact_info.phone }}</a>
                     </p>
                 </div>
+                {% endif %}
             </div>
         </div>
 

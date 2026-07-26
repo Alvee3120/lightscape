@@ -1,0 +1,235 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Pricing Plans | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-5xl">
+
+    <h1 class="text-3xl font-bold mb-8">Pricing Plans</h1>
+
+    <!-- Add New Plan -->
+    <div class="bg-base-200 rounded-lg p-6 mb-10">
+        <h2 class="text-xl font-bold mb-4">Add New Plan</h2>
+        <form id="plan-form" class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Service Name</span></label>
+                    <input type="text" name="name" required class="input input-bordered w-full" />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-control">
+                        <label class="label"><span class="label-text">Price</span></label>
+                        <input type="number" step="0.01" min="0" name="price" required class="input input-bordered w-full" />
+                    </div>
+                    <div class="form-control">
+                        <label class="label"><span class="label-text">Per</span></label>
+                        <select name="unit" class="select select-bordered w-full">
+                            <option value="day">Day</option>
+                            <option value="event">Event</option>
+                            <option value="project">Project</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid sm:grid-cols-3 gap-4">
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Price Prefix (optional)</span></label>
+                    <input type="text" name="price_prefix" placeholder="e.g. From" class="input input-bordered w-full" />
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Badge Text</span></label>
+                    <input type="text" name="badge_text" value="Most booked" class="input input-bordered w-full" />
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Display Order</span></label>
+                    <input type="number" name="order" value="0" class="input input-bordered w-full" />
+                </div>
+            </div>
+
+            <label class="label cursor-pointer justify-start gap-3 w-fit">
+                <input type="checkbox" name="is_featured" class="checkbox checkbox-primary" />
+                <span class="label-text">Highlight this card (badge + border)</span>
+            </label>
+
+            <div class="form-control">
+                <label class="label"><span class="label-text">Service Info</span></label>
+                <div id="features-container" class="space-y-2 mb-2">
+                    <div class="flex gap-2">
+                        <input type="text" name="features[]" placeholder="e.g. 8 hours on location" class="input input-bordered input-sm w-full" />
+                        <button type="button" class="btn btn-sm btn-square btn-error remove-feature">✕</button>
+                    </div>
+                </div>
+                <button type="button" id="add-feature" class="btn btn-outline btn-sm w-fit">+ Add another line</button>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="btn btn-primary btn-sm">Add Plan</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Existing Plans -->
+    <h2 class="text-xl font-bold mb-3">Current Plans ({{ plans|length }})</h2>
+    <div class="overflow-x-auto">
+        <table class="table table-zebra bg-base-200 rounded-lg">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Per</th>
+                    <th>Featured</th>
+                    <th>Info Lines</th>
+                    <th>Order</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="plans-body">
+                {% for plan in plans %}
+                <tr id="plan-{{ plan.id }}">
+                    <td>{{ plan.name }}</td>
+                    <td>{% if plan.price_prefix %}{{ plan.price_prefix }} {% endif %}${{ plan.display_price }}</td>
+                    <td>{{ plan.get_unit_display }}</td>
+                    <td>
+                        {% if plan.is_featured %}
+                        <span class="badge badge-primary">{{ plan.badge_text }}</span>
+                        {% else %}
+                        <span class="opacity-40">—</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ plan.features.all|length }}</td>
+                    <td>{{ plan.order }}</td>
+                    <td class="flex gap-2">
+                        <a href="{% url 'service_plan_edit' plan.id %}" class="btn btn-outline btn-xs">Edit</a>
+                        <button onclick="deletePlan({{ plan.id }})" class="btn btn-error btn-xs">Delete</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr id="no-plans-row"><td colspan="7" class="text-center opacity-60 py-6">No pricing plans yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+const planForm = document.getElementById('plan-form');
+const featuresContainer = document.getElementById('features-container');
+const addFeatureBtn = document.getElementById('add-feature');
+const plansBody = document.getElementById('plans-body');
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
+function featureRow() {
+    const row = document.createElement('div');
+    row.className = 'flex gap-2';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'features[]';
+    input.placeholder = 'e.g. 40 graded frames';
+    input.className = 'input input-bordered input-sm w-full';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn btn-sm btn-square btn-error remove-feature';
+    removeBtn.textContent = '✕';
+    row.appendChild(input);
+    row.appendChild(removeBtn);
+    return row;
+}
+
+addFeatureBtn.addEventListener('click', () => {
+    featuresContainer.appendChild(featureRow());
+});
+
+featuresContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-feature')) {
+        if (featuresContainer.children.length > 1) {
+            e.target.closest('.flex').remove();
+        }
+    }
+});
+
+function cell(text) {
+    const td = document.createElement('td');
+    td.textContent = text;
+    return td;
+}
+
+function addPlanRow(data) {
+    const noRow = document.getElementById('no-plans-row');
+    if (noRow) noRow.remove();
+
+    const tr = document.createElement('tr');
+    tr.id = `plan-${data.id}`;
+
+    tr.appendChild(cell(data.name));
+    tr.appendChild(cell(data.display_price_label));
+    tr.appendChild(cell(data.unit));
+
+    const featuredTd = document.createElement('td');
+    if (data.is_featured) {
+        const badge = document.createElement('span');
+        badge.className = 'badge badge-primary';
+        badge.textContent = data.badge_text || '';
+        featuredTd.appendChild(badge);
+    } else {
+        featuredTd.innerHTML = '<span class="opacity-40">—</span>';
+    }
+    tr.appendChild(featuredTd);
+
+    tr.appendChild(cell(data.features.length));
+    tr.appendChild(cell(data.order));
+
+    const actionsTd = document.createElement('td');
+    actionsTd.className = 'flex gap-2';
+    const editLink = document.createElement('a');
+    editLink.href = data.edit_url;
+    editLink.className = 'btn btn-outline btn-xs';
+    editLink.textContent = 'Edit';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn btn-error btn-xs';
+    delBtn.textContent = 'Delete';
+    delBtn.setAttribute('onclick', `deletePlan(${data.id})`);
+    actionsTd.appendChild(editLink);
+    actionsTd.appendChild(delBtn);
+    tr.appendChild(actionsTd);
+
+    plansBody.appendChild(tr);
+}
+
+planForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(planForm);
+
+    fetch("{% url 'service_plan_create' %}", {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        body: formData,
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        data.display_price_label = (data.price_prefix ? data.price_prefix + ' ' : '') + '$' + data.display_price;
+        addPlanRow(data);
+        planForm.reset();
+        featuresContainer.innerHTML = '';
+        featuresContainer.appendChild(featureRow());
+    });
+});
+
+function deletePlan(id) {
+    if (!confirm('Delete this pricing plan?')) return;
+    fetch(`/dashboard/services/delete/${id}/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    }).then(res => {
+        if (res.ok) document.getElementById(`plan-${id}`).remove();
+    });
+}
+</script>
+{% endblock %}

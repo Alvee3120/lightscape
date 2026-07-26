@@ -1,0 +1,49 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Tags | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <h1 class="text-3xl font-bold mb-8">Tags</h1>
+
+    <form method="post" class="bg-base-200 rounded-lg p-6 flex gap-3 items-end mb-10">
+        {% csrf_token %}
+        <div class="form-control flex-1">
+            <label class="label"><span class="label-text">New Tag Name</span></label>
+            <input type="text" name="name" required class="input input-bordered w-full" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add Tag</button>
+    </form>
+
+    <div class="overflow-x-auto">
+        <table class="table table-zebra bg-base-200 rounded-lg">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Assets</th>
+                    <th>Portfolio Items</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tag in tags %}
+                <tr>
+                    <td>{{ tag.name }}</td>
+                    <td>{{ tag.assets.count }}</td>
+                    <td>{{ tag.portfolio_items.count }}</td>
+                    <td class="flex gap-2">
+                        <a href="{% url 'gallery:tag_edit' tag.id %}" class="btn btn-outline btn-xs">Edit</a>
+                        <form method="post" action="{% url 'gallery:tag_delete' tag.id %}" onsubmit="return confirm('Delete this tag?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-error btn-xs">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center opacity-60 py-6">No tags yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

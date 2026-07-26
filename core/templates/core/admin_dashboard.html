@@ -1,18 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 {% block title %}Dashboard | LightScape{% endblock %}
-{% block content %}
+{% block dashboard_content %}
 <div class="container mx-auto px-6 py-10">
 
-    <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">Dashboard</h1>
-    <div class="flex gap-2 flex-wrap">
-        <a href="{% url 'gallery:portfolio_upload_page' %}" class="btn btn-secondary btn-sm">Portfolio</a>
-        <a href="{% url 'gallery:upload_page' %}" class="btn btn-primary btn-sm">Storefront Upload</a>
-        <a href="{% url 'manage_content' %}" class="btn btn-secondary btn-sm">Site Content</a>
-        <a href="{% url 'admin_logout' %}" class="btn btn-outline btn-sm">Logout</a>
-    </div>
-</div>
-</div>
+    <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
 
     <!-- Overview Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">

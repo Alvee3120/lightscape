@@ -1,0 +1,64 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Edit Portfolio Item | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Edit Portfolio Item</h1>
+        <a href="{% url 'gallery:portfolio_upload_page' %}" class="btn btn-outline btn-sm">Back to Portfolio</a>
+    </div>
+
+    {% if item.preview_file %}
+    <img src="{{ item.preview_file.url }}" class="w-full max-h-64 object-cover rounded-lg mb-6" />
+    {% endif %}
+
+    <form method="post" class="bg-base-200 rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Title</span></label>
+            <input type="text" name="title" value="{{ item.title }}" required class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Description</span></label>
+            <textarea name="description" rows="4" class="textarea textarea-bordered w-full">{{ item.description }}</textarea>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Category</span></label>
+                <select name="category" class="select select-bordered w-full">
+                    <option value="">No category</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if item.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Display Order</span></label>
+                <input type="number" name="order" value="{{ item.order }}" class="input input-bordered w-full" />
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Tags</span></label>
+            <div class="flex flex-wrap gap-3 bg-base-100 rounded-lg p-4">
+                {% for tag in all_tags %}
+                <label class="label cursor-pointer gap-2">
+                    <input type="checkbox" name="tags" value="{{ tag.id }}" class="checkbox checkbox-sm" {% if tag in item.tags.all %}checked{% endif %} />
+                    <span class="label-text">{{ tag.name }}</span>
+                </label>
+                {% empty %}
+                <p class="opacity-60 text-sm">No tags yet — add some from the Tags page.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

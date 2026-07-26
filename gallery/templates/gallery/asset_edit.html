@@ -1,0 +1,71 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Edit Storefront Image | LightScape{% endblock %}
+{% block dashboard_content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Edit Storefront Image</h1>
+        <a href="{% url 'gallery:upload_page' %}" class="btn btn-outline btn-sm">Back to Storefront</a>
+    </div>
+
+    {% if asset.preview_file %}
+    <img src="{{ asset.preview_file.url }}" class="w-full max-h-64 object-cover rounded-lg mb-6" />
+    {% endif %}
+
+    <form method="post" class="bg-base-200 rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Title</span></label>
+            <input type="text" name="title" value="{{ asset.title }}" required class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Description</span></label>
+            <textarea name="description" rows="4" class="textarea textarea-bordered w-full">{{ asset.description }}</textarea>
+        </div>
+
+        <div class="flex flex-wrap gap-6 items-center">
+            <label class="label cursor-pointer gap-2">
+                <input type="checkbox" id="id_is_free" name="is_free" class="checkbox" {% if asset.is_free %}checked{% endif %} />
+                <span class="label-text">Free</span>
+            </label>
+            <div class="form-control" id="price-field" {% if asset.is_free %}style="display:none;"{% endif %}>
+                <label class="label"><span class="label-text">Price</span></label>
+                <input type="number" step="0.01" min="0" name="price" value="{{ asset.price }}" class="input input-bordered" />
+            </div>
+            <label class="label cursor-pointer gap-2">
+                <input type="checkbox" name="is_published" class="checkbox" {% if asset.is_published %}checked{% endif %} />
+                <span class="label-text">Published</span>
+            </label>
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Tags</span></label>
+            <div class="flex flex-wrap gap-3 bg-base-100 rounded-lg p-4">
+                {% for tag in all_tags %}
+                <label class="label cursor-pointer gap-2">
+                    <input type="checkbox" name="tags" value="{{ tag.id }}" class="checkbox checkbox-sm" {% if tag in asset.tags.all %}checked{% endif %} />
+                    <span class="label-text">{{ tag.name }}</span>
+                </label>
+                {% empty %}
+                <p class="opacity-60 text-sm">No tags yet — add some from the Tags page.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+const isFreeCheckbox = document.getElementById('id_is_free');
+const priceField = document.getElementById('price-field');
+isFreeCheckbox.addEventListener('change', () => {
+    priceField.style.display = isFreeCheckbox.checked ? 'none' : '';
+});
+</script>
+{% endblock %}

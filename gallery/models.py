@@ -89,6 +89,8 @@ class Portfolio(models.Model):
         Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='portfolio_items'
     )
 
+    tags = models.ManyToManyField(Tag, blank=True, related_name='portfolio_items')
+
     original_file = models.ImageField(upload_to='portfolio/originals/%Y/%m/')
     preview_file = models.ImageField(upload_to='portfolio/previews/%Y/%m/', blank=True, null=True)
 
