@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Services | LightScape{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<div
+    class="hero min-h-[60vh] relative"
+    {% if hero_item %}style="background-image: url('{{ hero_item.preview_file.url }}'); background-size: cover; background-position: center;"{% endif %}>
+    <div class="hero-overlay bg-opacity-60"></div>
+    <div class="relative w-full">
+        <div class="container mx-auto px-6">
+            <div class="max-w-xl text-neutral-content">
+                <p class="font-mono text-sm opacity-70 mb-2">Services</p>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Sessions, campaigns and licensing</h1>
+                <p class="text-lg opacity-90">
+                    Clear scope, clear pricing. Every package includes hand-graded frames and a
+                    private delivery gallery.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Packages -->
+<section class="container mx-auto px-6 py-16 lg:py-24">
+    <div class="grid md:grid-cols-3 gap-8">
+
+        <div class="card bg-base-200 shadow-md p-8 flex flex-col">
+            <h3 class="text-xl font-bold mb-1">Editorial Day</h3>
+            <p class="text-2xl font-bold mb-6">$1,400<span class="text-sm font-normal opacity-60"> / day</span></p>
+            <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
+                <li class="border-t border-base-content/10 pt-3">8 hours on location</li>
+                <li class="border-t border-base-content/10 pt-3">40 graded frames</li>
+                <li class="border-t border-base-content/10 pt-3">Web + print licence</li>
+                <li class="border-t border-base-content/10 pt-3">72h turnaround</li>
+            </ul>
+            <a href="{% url 'contact' %}" class="btn btn-outline btn-block">Enquire</a>
+        </div>
+
+        <div class="card bg-base-200 shadow-md p-8 flex flex-col border-2 border-primary relative">
+            <span class="badge badge-primary absolute -top-3 left-8">Most booked</span>
+            <h3 class="text-xl font-bold mb-1">Wedding Story</h3>
+            <p class="text-2xl font-bold mb-6">$3,200<span class="text-sm font-normal opacity-60"> / event</span></p>
+            <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
+                <li class="border-t border-base-content/10 pt-3">Full-day coverage, two shooters</li>
+                <li class="border-t border-base-content/10 pt-3">400+ graded frames</li>
+                <li class="border-t border-base-content/10 pt-3">Private online gallery</li>
+                <li class="border-t border-base-content/10 pt-3">Hand-bound 40pp album</li>
+            </ul>
+            <a href="{% url 'contact' %}" class="btn btn-primary btn-block">Enquire</a>
+        </div>
+
+        <div class="card bg-base-200 shadow-md p-8 flex flex-col">
+            <h3 class="text-xl font-bold mb-1">Brand Campaign</h3>
+            <p class="text-2xl font-bold mb-6">From $5,000<span class="text-sm font-normal opacity-60"> / project</span></p>
+            <ul class="space-y-3 mb-8 text-sm opacity-80 flex-1">
+                <li class="border-t border-base-content/10 pt-3">Concept + art direction</li>
+                <li class="border-t border-base-content/10 pt-3">Studio &amp; location</li>
+                <li class="border-t border-base-content/10 pt-3">Retouched hero set</li>
+                <li class="border-t border-base-content/10 pt-3">Unlimited usage</li>
+            </ul>
+            <a href="{% url 'contact' %}" class="btn btn-outline btn-block">Enquire</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Digital licensing -->
+<section class="bg-base-200">
+    <div class="container mx-auto px-6 py-16 lg:py-24">
+        <p class="font-mono text-sm opacity-50 mb-2">Digital licensing</p>
+        <h2 class="text-3xl md:text-4xl font-bold mb-10">Buy a frame, not a headache</h2>
+
+        <div class="grid sm:grid-cols-3 gap-10 mb-10">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Personal</h3>
+                <p class="text-xl font-bold mb-3">Free</p>
+                <p class="opacity-70 text-sm">Wallpapers, prints for your own wall, social posts.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-1">Standard</h3>
+                <p class="text-xl font-bold mb-3">$24 – $45</p>
+                <p class="opacity-70 text-sm">Websites, blogs, small-run print up to 5,000 copies.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-1">Extended</h3>
+                <p class="text-xl font-bold mb-3">$180</p>
+                <p class="opacity-70 text-sm">Advertising, packaging, resale products, unlimited print.</p>
+            </div>
+        </div>
+
+        <a href="{% url 'gallery:gallery_list' %}" class="btn btn-outline">Browse licensable frames</a>
+    </div>
+</section>
+
+{% endblock %}

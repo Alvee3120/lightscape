@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | LightScape{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+
+    <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Dashboard</h1>
+    <div class="flex gap-2 flex-wrap">
+        <a href="{% url 'gallery:portfolio_upload_page' %}" class="btn btn-secondary btn-sm">Portfolio</a>
+        <a href="{% url 'gallery:upload_page' %}" class="btn btn-primary btn-sm">Storefront Upload</a>
+        <a href="{% url 'manage_content' %}" class="btn btn-secondary btn-sm">Site Content</a>
+        <a href="{% url 'admin_logout' %}" class="btn btn-outline btn-sm">Logout</a>
+    </div>
+</div>
+</div>
+
+    <!-- Overview Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div class="stat bg-base-200 rounded-lg shadow">
+            <div class="stat-title">Total Revenue</div>
+            <div class="stat-value text-primary">৳{{ total_revenue }}</div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg shadow">
+            <div class="stat-title">Paid Orders</div>
+            <div class="stat-value">{{ total_paid_orders }}</div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg shadow">
+            <div class="stat-title">Free Downloads</div>
+            <div class="stat-value text-success">{{ total_free_downloads }}</div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg shadow">
+            <div class="stat-title">Paid Downloads</div>
+            <div class="stat-value text-warning">{{ total_paid_downloads }}</div>
+        </div>
+    </div>
+
+    <!-- Sales History -->
+    <h2 class="text-xl font-bold mb-3">Recent Sales</h2>
+    <div class="overflow-x-auto mb-10">
+        <table class="table table-zebra bg-base-200 rounded-lg">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Buyer Email</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td class="font-mono text-xs">{{ order.gateway_transaction_id|default:"—" }}</td>
+                    <td>{{ order.email }}</td>
+                    <td>৳{{ order.amount_total }}</td>
+                    <td>{{ order.paid_at|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center opacity-60 py-6">No sales yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Top Assets -->
+    <h2 class="text-xl font-bold mb-3">Top Performing Assets</h2>
+    <div class="overflow-x-auto">
+        <table class="table table-zebra bg-base-200 rounded-lg">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Downloads</th>
+                    <th>Views</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asset in top_assets %}
+                <tr>
+                    <td>{{ asset.title }}</td>
+                    <td>
+                        {% if asset.is_free %}
+                        <span class="badge badge-success text-white">Free</span>
+                        {% else %}
+                        <span class="badge badge-warning">Paid</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ asset.download_count }}</td>
+                    <td>{{ asset.view_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

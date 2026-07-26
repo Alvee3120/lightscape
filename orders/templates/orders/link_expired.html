@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Link Expired | LightScape{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-24 text-center">
+    <h1 class="text-3xl font-bold mb-4">⏳ This download link has expired</h1>
+    <p class="opacity-70 mb-6">Download links are limited-use and time-limited for security. Please return to the gallery to request a new one.</p>
+    <a href="{% url 'gallery:gallery_list' %}" class="btn btn-primary">Back to Gallery</a>
+</div>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block title %}Portfolio Upload | LightScape{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-10 max-w-5xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Portfolio Showcase</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm">Back to Dashboard</a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-2 mb-6">
+        <div class="form-control md:col-span-1">
+            <label class="label"><span class="label-text">Category (optional, applies to all in this batch)</span></label>
+            <select id="batch-category" class="select select-bordered select-sm">
+                <option value="">No category</option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Drop Zone -->
+    <div
+        id="drop-zone"
+        class="border-2 border-dashed border-base-content/30 rounded-lg p-12 text-center cursor-pointer hover:border-primary transition mb-8">
+        <p class="text-lg font-semibold mb-2">Drag & drop portfolio images here</p>
+        <p class="opacity-60 mb-4">or click to browse (multiple files supported)</p>
+        <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+        <button type="button" onclick="document.getElementById('file-input').click()" class="btn btn-primary btn-sm">
+            Choose Files
+        </button>
+    </div>
+
+    <!-- Upload Progress List -->
+    <div id="upload-list" class="space-y-3 mb-10"></div>
+
+    <!-- Existing Portfolio Grid -->
+    <h2 class="text-xl font-bold mb-3">Current Portfolio ({{ portfolio_items|length }})</h2>
+    <div id="portfolio-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {% for item in portfolio_items %}
+        <div class="relative group" id="item-{{ item.id }}">
+            <img src="{{ item.preview_file.url }}" class="w-full aspect-square object-cover rounded-lg" alt="{{ item.title }}">
+            <button
+                onclick="deleteItem({{ item.id }})"
+                class="absolute top-1 right-1 btn btn-circle btn-xs btn-error opacity-0 group-hover:opacity-100 transition">
+                ✕
+            </button>
+            <p class="text-xs truncate mt-1">{{ item.title }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const uploadList = document.getElementById('upload-list');
+const portfolioGrid = document.getElementById('portfolio-grid');
+const batchCategory = document.getElementById('batch-category');
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
+function uploadFile(file) {
+    const row = document.createElement('div');
+    row.className = 'bg-base-200 rounded-lg p-4';
+    row.innerHTML = `
+        <div class="flex justify-between text-sm mb-2">
+            <span class="font-medium truncate">${file.name}</span>
+            <span class="status opacity-60">0%</span>
+        </div>
+        <progress class="progress progress-primary w-full" value="0" max="100"></progress>
+    `;
+    uploadList.prepend(row);
+
+    const progressBar = row.querySelector('progress');
+    const statusText = row.querySelector('.status');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', "{% url 'gallery:portfolio_upload_submit' %}", true);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+    xhr.upload.onprogress = function (e) {
+        if (e.lengthComputable) {
+            const percent = Math.round((e.loaded / e.total) * 100);
+            progressBar.value = percent;
+            statusText.textContent = percent + '%';
+        }
+    };
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            statusText.textContent = '✓ Uploaded';
+            statusText.classList.add('text-success');
+
+            if (data.preview_url) {
+                const card = document.createElement('div');
+                card.className = 'relative group';
+                card.id = `item-${data.item_id}`;
+                card.innerHTML = `
+                    <img src="${data.preview_url}" class="w-full aspect-square object-cover rounded-lg">
+                    <button onclick="deleteItem(${data.item_id})" class="absolute top-1 right-1 btn btn-circle btn-xs btn-error opacity-0 group-hover:opacity-100 transition">✕</button>
+                    <p class="text-xs truncate mt-1">${data.title}</p>
+                `;
+                portfolioGrid.prepend(card);
+            }
+        } else {
+            statusText.textContent = '✗ Failed';
+            statusText.classList.add('text-error');
+        }
+    };
+
+    xhr.onerror = function () {
+        statusText.textContent = '✗ Failed';
+        statusText.classList.add('text-error');
+    };
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('category', batchCategory.value);
+    xhr.send(formData);
+}
+
+function handleFiles(files) {
+    Array.from(files).forEach(uploadFile);
+}
+
+function deleteItem(id) {
+    if (!confirm('Delete this portfolio image?')) return;
+    fetch(`/gallery/portfolio-upload/delete/${id}/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    }).then(res => {
+        if (res.ok) document.getElementById(`item-${id}`).remove();
+    });
+}
+
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-primary');
+});
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-primary');
+});
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-primary');
+    handleFiles(e.dataTransfer.files);
+});
+</script>
+{% endblock %}

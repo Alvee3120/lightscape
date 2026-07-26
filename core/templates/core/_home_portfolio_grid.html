@@ -1,0 +1,33 @@
+<div class="flex flex-wrap gap-2 mb-6">
+    <button
+        class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline{% endif %}"
+        hx-get="{% url 'home_portfolio_filter' %}"
+        hx-target="#home-portfolio-container"
+        hx-swap="innerHTML">
+        All
+    </button>
+    {% for cat in categories %}
+    <button
+        class="btn btn-sm {% if active_category == cat.slug %}btn-primary{% else %}btn-outline{% endif %}"
+        hx-get="{% url 'home_portfolio_filter' %}?category={{ cat.slug }}"
+        hx-target="#home-portfolio-container"
+        hx-swap="innerHTML">
+        {{ cat.name }}
+    </button>
+    {% endfor %}
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    {% for item in portfolio_items %}
+    <div class="rounded-lg overflow-hidden group">
+        <figure class="aspect-[4/5] overflow-hidden">
+            <img
+                src="{{ item.preview_file.url }}"
+                alt="{{ item.title }}"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+        </figure>
+    </div>
+    {% empty %}
+    <p class="col-span-full text-center opacity-60 py-16">No portfolio images found.</p>
+    {% endfor %}
+</div>

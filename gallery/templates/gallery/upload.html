@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Upload Photos | LightScape{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Upload Photos</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm">Back to Dashboard</a>
+    </div>
+
+    <!-- Drop Zone -->
+    <div
+        id="drop-zone"
+        class="border-2 border-dashed border-base-content/30 rounded-lg p-12 text-center cursor-pointer hover:border-primary transition mb-8">
+        <p class="text-lg font-semibold mb-2">Drag & drop images here</p>
+        <p class="opacity-60 mb-4">or click to browse (JPEG, PNG, WEBP — multiple files supported)</p>
+        <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+        <button type="button" onclick="document.getElementById('file-input').click()" class="btn btn-primary btn-sm">
+            Choose Files
+        </button>
+    </div>
+
+    <!-- Upload Progress List -->
+    <div id="upload-list" class="space-y-3"></div>
+
+</div>
+
+<script>
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const uploadList = document.getElementById('upload-list');
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
+function uploadFile(file) {
+    const row = document.createElement('div');
+    row.className = 'bg-base-200 rounded-lg p-4';
+    row.innerHTML = `
+        <div class="flex justify-between text-sm mb-2">
+            <span class="font-medium truncate">${file.name}</span>
+            <span class="status opacity-60">0%</span>
+        </div>
+        <progress class="progress progress-primary w-full" value="0" max="100"></progress>
+    `;
+    uploadList.prepend(row);
+
+    const progressBar = row.querySelector('progress');
+    const statusText = row.querySelector('.status');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', "{% url 'gallery:upload_asset' %}", true);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+    xhr.upload.onprogress = function (e) {
+        if (e.lengthComputable) {
+            const percent = Math.round((e.loaded / e.total) * 100);
+            progressBar.value = percent;
+            statusText.textContent = percent + '%';
+        }
+    };
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            statusText.textContent = '✓ Uploaded';
+            statusText.classList.add('text-success');
+            row.innerHTML += `<a href="${data.edit_url}" target="_blank" class="link link-primary text-xs">Edit details →</a>`;
+        } else {
+            statusText.textContent = '✗ Failed';
+            statusText.classList.add('text-error');
+        }
+    };
+
+    xhr.onerror = function () {
+        statusText.textContent = '✗ Failed';
+        statusText.classList.add('text-error');
+    };
+
+    const formData = new FormData();
+    formData.append('file', file);
+    xhr.send(formData);
+}
+
+function handleFiles(files) {
+    Array.from(files).forEach(uploadFile);
+}
+
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-primary');
+});
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-primary');
+});
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-primary');
+    handleFiles(e.dataTransfer.files);
+});
+</script>
+{% endblock %}

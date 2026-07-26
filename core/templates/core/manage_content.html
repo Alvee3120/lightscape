@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Site Content | LightScape{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-10 max-w-3xl">
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">About Page Content</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm">Back to Dashboard</a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="bg-base-200 rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Heading</span></label>
+            <input
+                type="text"
+                name="heading"
+                value="{{ content.heading }}"
+                class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Description</span></label>
+            <textarea
+                name="description"
+                rows="4"
+                class="textarea textarea-bordered w-full">{{ content.description }}</textarea>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Button Text</span></label>
+                <input
+                    type="text"
+                    name="button_text"
+                    value="{{ content.button_text }}"
+                    class="input input-bordered w-full" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Button URL</span></label>
+                <input
+                    type="text"
+                    name="button_url"
+                    value="{{ content.button_url }}"
+                    class="input input-bordered w-full" />
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Hero Image</span></label>
+            {% if content.hero_image %}
+            <img src="{{ content.hero_image.url }}" class="w-full max-h-40 object-cover rounded mb-2" />
+            {% endif %}
+            <input
+                type="file"
+                name="hero_image"
+                accept="image/*"
+                class="file-input file-input-bordered w-full" />
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

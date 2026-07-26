@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}{{ content.heading|default:"About" }} | LightScape{% endblock %}
+{% block content %}
+
+<!-- Intro -->
+<section class="container mx-auto px-6 py-16 lg:py-24">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">{{ content.heading }}</h1>
+            <p class="opacity-80 whitespace-pre-line mb-8">{{ content.description }}</p>
+            {% if content.button_text and content.button_url %}
+            <a href="{{ content.button_url }}" class="btn btn-primary">{{ content.button_text }}</a>
+            {% endif %}
+        </div>
+        <div>
+            {% if content.hero_image %}
+            <img
+                src="{{ content.hero_image.url }}"
+                alt="{{ content.heading }}"
+                class="w-full rounded-lg object-cover aspect-[4/5]" />
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Process -->
+<section class="bg-base-200">
+    <div class="container mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold mb-10">The process</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div>
+                <span class="font-mono text-sm opacity-50">01</span>
+                <h3 class="text-xl font-bold mt-2 mb-2">Scout</h3>
+                <p class="opacity-70">Location, forecast, tide charts, and a plan for the light.</p>
+            </div>
+            <div>
+                <span class="font-mono text-sm opacity-50">02</span>
+                <h3 class="text-xl font-bold mt-2 mb-2">Shoot</h3>
+                <p class="opacity-70">Medium format and 35mm, natural light first, strobes when the story needs it.</p>
+            </div>
+            <div>
+                <span class="font-mono text-sm opacity-50">03</span>
+                <h3 class="text-xl font-bold mt-2 mb-2">Grade</h3>
+                <p class="opacity-70">Hand-graded per frame. No presets, no batch looks.</p>
+            </div>
+            <div>
+                <span class="font-mono text-sm opacity-50">04</span>
+                <h3 class="text-xl font-bold mt-2 mb-2">Deliver</h3>
+                <p class="opacity-70">Watermarked previews public, clean masters delivered on licence.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recognition -->
+<section class="container mx-auto px-6 py-16 lg:py-24">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+            {% if award_image %}
+            <img
+                src="{{ award_image.preview_file.url }}"
+                alt="Recognition"
+                class="w-full rounded-lg object-cover aspect-[4/5]" />
+            {% endif %}
+        </div>
+        <div>
+            <h2 class="text-3xl font-bold mb-1">Recognition</h2>
+            <p class="opacity-60 mb-8">Shelf of nice things</p>
+            <ul class="space-y-4">
+                <li class="flex gap-4">
+                    <span class="font-mono text-sm opacity-50 w-12 shrink-0">2025</span>
+                    <span class="opacity-80">Sony World Photography — Landscape shortlist</span>
+                </li>
+                <li class="flex gap-4">
+                    <span class="font-mono text-sm opacity-50 w-12 shrink-0">2024</span>
+                    <span class="opacity-80">Communication Arts Photography Annual</span>
+                </li>
+                <li class="flex gap-4">
+                    <span class="font-mono text-sm opacity-50 w-12 shrink-0">2023</span>
+                    <span class="opacity-80">PDN Emerging Talent, Editorial</span>
+                </li>
+                <li class="flex gap-4">
+                    <span class="font-mono text-sm opacity-50 w-12 shrink-0">2022</span>
+                    <span class="opacity-80">National Geographic Traveller, cover</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

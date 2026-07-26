@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Contact | LightScape{% endblock %}
+{% block content %}
+
+<section class="container mx-auto px-6 py-16 lg:py-24">
+    <div class="grid lg:grid-cols-2 gap-14">
+
+        <!-- Info -->
+        <div>
+            <p class="font-mono text-sm opacity-50 mb-2">Contact</p>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Tell me about the light you need.</h1>
+            <p class="opacity-80 mb-10">
+                Bookings open quarterly, licensing enquiries answered daily. Expect a reply within
+                two business days.
+            </p>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-bold mb-1">Studio</h3>
+                    <p class="opacity-70">Pier 24, San Francisco, CA</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-1">Email</h3>
+                    <p class="opacity-70">
+                        <a href="mailto:hello@lumenatlas.studio" class="hover:opacity-100">hello@lumenatlas.studio</a>
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-1">Phone</h3>
+                    <p class="opacity-70">
+                        <a href="tel:+14155550184" class="hover:opacity-100">+1 (415) 555-0184</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div>
+            <form method="post" class="bg-base-200 rounded-lg p-8 space-y-5">
+                {% csrf_token %}
+
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Name</span></label>
+                    <input
+                        type="text"
+                        name="name"
+                        required
+                        class="input input-bordered w-full" />
+                </div>
+
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Email</span></label>
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        class="input input-bordered w-full" />
+                </div>
+
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Message</span></label>
+                    <textarea
+                        name="message"
+                        rows="6"
+                        required
+                        class="textarea textarea-bordered w-full"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full">Send Message</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

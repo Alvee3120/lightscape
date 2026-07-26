@@ -1,0 +1,26 @@
+<div class="bg-base-200 rounded-lg overflow-hidden">
+    <img src="{{ asset.preview_file.url }}" alt="{{ asset.title }}" class="w-full max-h-[75vh] object-contain bg-black" />
+    <div class="p-5">
+        <h2 class="text-2xl font-bold">{{ asset.title }}</h2>
+        <p class="opacity-70 mt-1">{{ asset.description }}</p>
+        <div class="flex items-center justify-between mt-4">
+            <div class="flex gap-2">
+                {% for tag in asset.tags.all %}
+                <span class="badge badge-outline">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            {% if asset.is_free %}
+<a href="{% url 'orders:request_free_download' asset.uid %}" class="btn btn-success text-white">
+    Download Free
+</a>
+{% else %}
+<form action="{% url 'orders:create_checkout_session' asset.uid %}" method="POST" class="flex gap-2">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="your@email.com" required
+           class="input input-bordered input-sm" />
+    <button type="submit" class="btn btn-warning">Buy for ${{ asset.price }}</button>
+</form>
+{% endif %}
+        </div>
+    </div>
+</div>
