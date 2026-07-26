@@ -155,15 +155,15 @@ def serve_download(request, token):
     download_token.register_use()
 
     asset = download_token.asset
-    file_path = asset.original_file.path
 
-    if not os.path.exists(file_path):
+    if not asset.original_file:
         raise Http404("File not found.")
 
+    _, ext = os.path.splitext(asset.original_file.name)
     response = FileResponse(
-        open(file_path, 'rb'),
+        asset.original_file.open('rb'),
         as_attachment=True,
-        filename=f"{asset.slug}{os.path.splitext(file_path)[1]}"
+        filename=f"{asset.slug}{ext}"
     )
     return response
 
